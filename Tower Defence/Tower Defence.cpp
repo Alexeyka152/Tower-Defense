@@ -1,8 +1,11 @@
 ﻿#include <SFML/Graphics.hpp>
+#include "Enemy.h"
+
+using namespace sf;
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(200, 200), "Tower Defence");
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
 
