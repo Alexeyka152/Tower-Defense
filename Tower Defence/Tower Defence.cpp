@@ -1,17 +1,19 @@
 ﻿#include <SFML/Graphics.hpp>
+#include <iostream>
+#include <string>
 #include "Enemy.h"
 
 using namespace sf;
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "Tower Defence");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    RenderWindow window(VideoMode(800, 800), "Tower Defence");
+
+    Enemy Rhino("RhinoLeft.png", 10, 10);
 
     while (window.isOpen())
     {
-        sf::Event event;
+        Event event;
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
@@ -19,7 +21,7 @@ int main()
         }
 
         window.clear();
-        window.draw(shape);
+        window.draw(Rhino.GetSprite());
         window.display();
     }
 
