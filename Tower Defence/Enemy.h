@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <string>
 using namespace sf;
 
 class Enemy
@@ -16,15 +15,17 @@ public:
 	void SetX(int x); //сеттер для х
 	void SetY(int y); //сеттер для у
 	void SetHP(int HP); //сеттер для HP
+	void SetTime(float time); //сеттер для времени
 	Sprite GetSprite(); //геттер для спрайта
 	Enemy(String File, int x, int y); //конструктор класса
 
 private:
-	int x; //x координата спрайта, при генерации находится в нуле
-	int y; //у координата спрайта, при генерации находится в нуле
+	int x; //x координата спрайта
+	int y; //у координата спрайта
 	int hp; //количество хп
-	int velocity; //величина скорости
 	int direction; //направление скорости, 0 - вверх, 1 - вправо, 2 - вниз, 3 - влево
+	float time; //?
+	float velocity; //величина скорости
 	String File;
 	Image image;
 	Texture texture;
