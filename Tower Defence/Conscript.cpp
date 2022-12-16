@@ -2,6 +2,8 @@
 
 void Conscript::Move()
 {
+	velocity = 0.1 * hp / 100.0f;
+
 	counter++;
 	if (counter == 101) { counter = 1; }
 
@@ -45,6 +47,18 @@ void Conscript::Move()
 	else if (direction == 3) { sprite.move(-velocity * time, 0); }
 }
 
+void Conscript::Attacking(int TowerType)
+{
+	if (TowerType == 1)
+	{
+		hp -= 30;
+	}
+	else if (TowerType == 2)
+	{
+		hp -= 50;
+	}
+}
+
 Conscript::Conscript(String File, int x, int y)
 {
 	image.loadFromFile("sprites\\" + File + "11.png");
@@ -53,6 +67,7 @@ Conscript::Conscript(String File, int x, int y)
 	sprite.setPosition(x, y);
 	velocity = 0.1;
 	counter = 1;
+	hp = 100;
 	this->x = x;
 	this->y = y;
 	this->direction = 1;

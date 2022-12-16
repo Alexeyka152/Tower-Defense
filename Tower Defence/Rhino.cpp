@@ -90,7 +90,7 @@ void Rhino::Attacking(int TowerType)
 	}
 	else if (TowerType == 2)
 	{
-		hp -= 20;
+		hp -= 25;
 	}
 }
 
@@ -106,6 +106,7 @@ Rhino::Rhino(String File, int x, int y)
 	sprite.setTexture(texture);
 	sprite.setPosition(x, y);
 	velocity = 0.1;
+	hp = 100;
 	this->x = x;
 	this->y = y;
 	this->direction = 1;

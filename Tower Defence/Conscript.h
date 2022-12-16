@@ -10,6 +10,7 @@ class Conscript : public Rhino
 {
 public:
 	void Move() override; //перемещает спрайт
+	void Attacking(int TowerType) override; //для нанесения урона
 	Conscript(String File, int x, int y); //конструктор класса
 
 private:

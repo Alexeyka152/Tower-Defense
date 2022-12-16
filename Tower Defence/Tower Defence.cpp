@@ -3,17 +3,30 @@
 #include <string>
 #include <random>
 #include <vector>
+#include <ctime>
 #include "Rhino.h"
 #include "Conscript.h"
 #include "Tower.h"
 using namespace std;
 using namespace sf;
 
+float Distance(int a, int b, int x, int y)
+{
+    return sqrt(pow((float)a - (float)x, 2) + pow((float)b - (float)y, 2));
+}
+
 int main()
 {
     int DefenseMap[30][21] = { 0 }; //0 - ничего нет, 1 - Pillbox, 2 - PrismTower
-    int counter = 0;
-    vector<int> wave;
+    int WaveCounter = 1;
+    bool NewWave = true; //индикатор начала новой волны
+    vector<int> WaveSquad; //0 - дохлый юнит, 1 - Rhino, 2 - Conscript
+    vector<Rhino> RhinoWave; //вектор Rhino в волне
+    vector<Conscript> ConscriptWave; //вектор Conscript в волне
+    srand(time(NULL));
+    /*Rhino rhino("Rhino", -50, 50);
+    Conscript conscript("Conscript", -50, 50);*/
+
     RenderWindow window(VideoMode(1920, 1080), "Tower Defense", Style::Fullscreen);
     String CurrentOption = "Null";
     Image MapImage, BarImage;
@@ -28,18 +41,15 @@ int main()
     BarSprite.setPosition(1542, 0);
 
     Clock clock;
-    
-    Rhino rhino("Rhino", 0, 50);
-    Conscript conscript("Conscript", -50, 50);
-    
 
-    while (window.isOpen())
+    while (window.isOpen()) //игровой цикл
     {
-        window.draw(MapSprite);
+        window.draw(MapSprite); //отрисовка карты
+        window.draw(BarSprite); //отрисовка боковой панели
 
-        Vector2i MousePosition = Mouse::getPosition(window);
+        Vector2i MousePosition = Mouse::getPosition(window); //координаты курсора мыши
 
-        float time = clock.getElapsedTime().asMicroseconds();
+        float time = clock.getElapsedTime().asMicroseconds(); //время, что бы не было тормоза при большом количестве спрайтов
         clock.restart();
         time = time / 800;
 
@@ -76,6 +86,39 @@ int main()
             }
         }
 
+        if (NewWave == true)
+        {
+            WaveSquad.push_back(rand() % 2 + 1);
+
+            for (int i = 0; i < WaveSquad.size(); i++)
+            {
+                if (WaveSquad[i] == 1)
+                {
+                    Rhino rhino("Rhino", -50 * i, 50);
+                    RhinoWave.push_back(rhino);
+                }
+                else if (WaveSquad[i] == 2)
+                {
+                    Conscript conscript("Conscript", -50 * i, 50);
+                    ConscriptWave.push_back(conscript);
+                }
+            }
+            NewWave = false;
+        }
+
+        for (int i = 0; i < RhinoWave.size(); i++) //отрисовка и передвижение Rhino
+        {
+            RhinoWave[i].SetTime(time);
+            RhinoWave[i].Move();
+            window.draw(RhinoWave[i].GetSprite());
+        }
+        for (int i = 0; i < ConscriptWave.size(); i++) //отрисовка и передвижение Conscript
+        {
+            ConscriptWave[i].SetTime(time);
+            ConscriptWave[i].Move();
+            window.draw(ConscriptWave[i].GetSprite());
+        }
+
         for (int i = 0; i < 30; i++)
         {
             for (int j = 0; j < 21; j++)
@@ -92,14 +135,12 @@ int main()
                 }
             }
         }
-
-        rhino.SetTime(time);
+        /*rhino.SetTime(time);
         rhino.Move();
         conscript.SetTime(time);
         conscript.Move();
-        window.draw(BarSprite);
         window.draw(rhino.GetSprite());
-        window.draw(conscript.GetSprite());
+        window.draw(conscript.GetSprite());*/
         window.display();
     }
 

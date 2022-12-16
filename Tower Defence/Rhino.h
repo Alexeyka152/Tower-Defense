@@ -16,7 +16,7 @@ public:
 	void SetY(int y); //сеттер для у
 	void SetHP(int HP); //сеттер для HP
 	void SetTime(float time); //сеттер для времени
-	void Attacking(int TowerType); //для нанесения урона
+	virtual void Attacking(int TowerType); //для нанесения урона
 	Sprite GetSprite(); //геттер для спрайта
 	Rhino(String File, int x, int y); //конструктор класса
 
