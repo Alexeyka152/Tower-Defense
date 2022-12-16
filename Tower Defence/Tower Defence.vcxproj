@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Conscript.cpp" />
     <ClCompile Include="Rhino.cpp" />
     <ClCompile Include="Tower Defence.cpp" />
     <ClCompile Include="Tower.cpp" />
@@ -147,6 +148,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Conscript.h" />
     <ClInclude Include="Rhino.h" />
     <ClInclude Include="Tower.h" />
   </ItemGroup>

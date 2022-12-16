@@ -3,13 +3,14 @@
 #include <string>
 #include <random>
 #include "Rhino.h"
+#include "Conscript.h"
 #include "Tower.h"
 using namespace std;
 using namespace sf;
 
 int main()
 {
-    int DefenseMap[30][21] = { 0 };
+    int DefenseMap[30][21] = { 0 }; //0 - ничего нет, 1 - Pillbox, 2 - Prism Tower
     int counter = 0;
     RenderWindow window(VideoMode(1920, 1080), "Tower Defense", Style::Fullscreen);
     String CurrentOption = "Null";
@@ -25,14 +26,15 @@ int main()
     BarSprite.setPosition(1542, 0);
 
     Clock clock;
-
+    
     Rhino rhino("Rhino", 0, 50);
+    Conscript a("Rhino", 0, 50);
 
     while (window.isOpen())
     {
         window.draw(MapSprite);
 
-        Vector2i MousePos = Mouse::getPosition(window);
+        Vector2i MousePosition = Mouse::getPosition(window);
 
         float time = clock.getElapsedTime().asMicroseconds();
         clock.restart();
@@ -47,15 +49,15 @@ int main()
             {
                 if (event.key.code == Mouse::Left)
                 {
-                    if (MousePos.x >= 1591 && MousePos.x <= 1726 && MousePos.y >= 513 && MousePos.y <= 620)
+                    if (MousePosition.x >= 1591 && MousePosition.x <= 1726 && MousePosition.y >= 513 && MousePosition.y <= 620)
                     {
                         CurrentOption = "Pillbox";
                     }
-                    else if (MousePos.x < 1500)
+                    else if (MousePosition.x < 1500)
                     {
                         if (CurrentOption == "Pillbox")
                         {
-                            DefenseMap[MousePos.x / 50][MousePos.y / 50] = 1;
+                            DefenseMap[MousePosition.x / 50][MousePosition.y / 50] = 1;
                         }
                     }
                 }
