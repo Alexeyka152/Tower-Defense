@@ -7,7 +7,7 @@ using namespace std;
 class Rhino
 {
 public:
-	void Move(); //перемещает спрайт
+	virtual void Move(); //перемещает спрайт
 	void Death(); //вызывается при убийтве спрайта
 	int GetX(); //геттер для x
 	int GetY(); //геттер для y

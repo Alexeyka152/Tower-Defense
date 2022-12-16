@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <random>
+#include <vector>
 #include "Rhino.h"
 #include "Conscript.h"
 #include "Tower.h"
@@ -10,8 +11,9 @@ using namespace sf;
 
 int main()
 {
-    int DefenseMap[30][21] = { 0 }; //0 - ничего нет, 1 - Pillbox, 2 - Prism Tower
+    int DefenseMap[30][21] = { 0 }; //0 - ничего нет, 1 - Pillbox, 2 - PrismTower
     int counter = 0;
+    vector<int> wave;
     RenderWindow window(VideoMode(1920, 1080), "Tower Defense", Style::Fullscreen);
     String CurrentOption = "Null";
     Image MapImage, BarImage;
@@ -28,7 +30,8 @@ int main()
     Clock clock;
     
     Rhino rhino("Rhino", 0, 50);
-    Conscript a("Rhino", 0, 50);
+    Conscript conscript("Conscript", -50, 50);
+    
 
     while (window.isOpen())
     {
@@ -53,11 +56,19 @@ int main()
                     {
                         CurrentOption = "Pillbox";
                     }
+                    else if (MousePosition.x >= 1733 && MousePosition.x <= 1868 && MousePosition.y >= 513 && MousePosition.y <= 620)
+                    {
+                        CurrentOption = "PrismTower";
+                    }
                     else if (MousePosition.x < 1500)
                     {
                         if (CurrentOption == "Pillbox")
                         {
                             DefenseMap[MousePosition.x / 50][MousePosition.y / 50] = 1;
+                        }
+                        else if (CurrentOption == "PrismTower")
+                        {
+                            DefenseMap[MousePosition.x / 50][MousePosition.y / 50] = 2;
                         }
                     }
                 }
@@ -74,13 +85,21 @@ int main()
                     Tower Pillbox("Pillbox", 50 * i, 50 * j);
                     window.draw(Pillbox.GetSprite());
                 }
+                else if (DefenseMap[i][j] == 2)
+                {
+                    Tower Pillbox("PrismTower1", 50 * i, 50 * j - 50);
+                    window.draw(Pillbox.GetSprite());
+                }
             }
         }
 
         rhino.SetTime(time);
         rhino.Move();
+        conscript.SetTime(time);
+        conscript.Move();
         window.draw(BarSprite);
         window.draw(rhino.GetSprite());
+        window.draw(conscript.GetSprite());
         window.display();
     }
 
