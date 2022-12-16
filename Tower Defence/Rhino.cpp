@@ -1,39 +1,40 @@
-#include "Enemy.h"
+#include "Rhino.h"
 
-void Enemy::MoveTo(int x, int y)
+void Rhino::Move()
 {
-	
-}
-
-void Enemy::Move()
-{
-	if (sprite.getPosition().x == 750 && sprite.getPosition().y == 50)
+	if (sprite.getPosition().x >= 749 && sprite.getPosition().x <= 751 && sprite.getPosition().y == 50)
 	{
+		sprite.setPosition(750, 51);
 		direction = 2;
 		image.loadFromFile("sprites\\" + File + "2.png");
 	}
-	else if (sprite.getPosition().x == 750 && sprite.getPosition().y == 750)
+	else if (sprite.getPosition().x == 750 && sprite.getPosition().y >= 749 && sprite.getPosition().y <= 751)
 	{
+		sprite.setPosition(751, 750);
 		direction = 1;
 		image.loadFromFile("sprites\\" + File + "1.png");
 	}
-	else if (sprite.getPosition().x == 950 && sprite.getPosition().y == 750)
+	else if (sprite.getPosition().x >= 949 && sprite.getPosition().x <= 951 && sprite.getPosition().y == 750)
 	{
+		sprite.setPosition(950, 749);
 		direction = 0;
 		image.loadFromFile("sprites\\" + File + "0.png");
 	}
-	else if (sprite.getPosition().x == 950 && sprite.getPosition().y == 400)
+	else if (sprite.getPosition().x == 950 && sprite.getPosition().y >= 399 && sprite.getPosition().y <= 401)
 	{
+		sprite.setPosition(951, 400);
 		direction = 1;
 		image.loadFromFile("sprites\\" + File + "1.png");
 	}
-	else if (sprite.getPosition().x == 1350 && sprite.getPosition().y == 400)
+	else if (sprite.getPosition().x >= 1349 && sprite.getPosition().x <= 1351 && sprite.getPosition().y == 400)
 	{
+		sprite.setPosition(1350, 401);
 		direction = 2;
 		image.loadFromFile("sprites\\" + File + "2.png");
 	}
-	else if (sprite.getPosition().x == 1350 && sprite.getPosition().y == 950)
+	else if (sprite.getPosition().x == 1350 && sprite.getPosition().y >= 949 && sprite.getPosition().y <= 951)
 	{
+		sprite.setPosition(1351, 950);
 		direction = 3;
 		image.loadFromFile("sprites\\" + File + "3.png");
 	}
@@ -52,52 +53,52 @@ void Enemy::Move()
 	else if (direction == 3) { sprite.move(-velocity * time, 0); }
 }
 
-void Enemy::Death()
+void Rhino::Death()
 {
 	
 }
 
-int Enemy::GetX()
+int Rhino::GetX()
 {
 	return this->x;
 }
 
-int Enemy::GetY()
+int Rhino::GetY()
 {
 	return this->y;
 }
 
-int Enemy::GetHP()
+int Rhino::GetHP()
 {
 	return this->hp;
 }
 
-void Enemy::SetX(int x)
+void Rhino::SetX(int x)
 {
 	this->sprite.setPosition(x, this->y);
 }
 
-void Enemy::SetY(int y)
+void Rhino::SetY(int y)
 {
 	this->sprite.setPosition(this->x, y);
 }
 
-void Enemy::SetHP(int HP)
+void Rhino::SetHP(int HP)
 {
 	this->hp = HP;
 }
 
-void Enemy::SetTime(float time)
+void Rhino::SetTime(float time)
 {
 	this->time = time;
 }
 
-Sprite Enemy::GetSprite()
+Sprite Rhino::GetSprite()
 {
 	return this->sprite;
 }
 
-Enemy::Enemy(String File, int x, int y)
+Rhino::Rhino(String File, int x, int y)
 {
 	image.loadFromFile("sprites\\" + File + "1.png");
 	texture.loadFromImage(image);

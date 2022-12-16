@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <random>
-#include "Enemy.h"
+#include "Rhino.h"
 #include "Tower.h"
 using namespace std;
 using namespace sf;
@@ -11,22 +11,22 @@ int main()
 {
     int DefenseMap[30][21] = { 0 };
     int counter = 0;
-    RenderWindow window(VideoMode(1920, 1080), "Tower Defense");
+    RenderWindow window(VideoMode(1920, 1080), "Tower Defense", Style::Fullscreen);
     String CurrentOption = "Null";
-    Image MapImage; Image BarImage;
+    Image MapImage, BarImage;
     MapImage.loadFromFile("Design\\Map.png");
     BarImage.loadFromFile("Design\\RightBar.png");
-    Texture MapTexture; Texture BarTexture;
+    Texture MapTexture, BarTexture;
     MapTexture.loadFromImage(MapImage);
     BarTexture.loadFromImage(BarImage);
-    Sprite MapSprite; Sprite BarSprite;
+    Sprite MapSprite, BarSprite;
     MapSprite.setTexture(MapTexture);
     BarSprite.setTexture(BarTexture);
     BarSprite.setPosition(1542, 0);
 
     Clock clock;
 
-    Enemy Rhino("Rhino", 0, 50);
+    Rhino rhino("Rhino", 0, 50);
 
     while (window.isOpen())
     {
@@ -74,14 +74,11 @@ int main()
                 }
             }
         }
-        /*if (CurrentOption == "Null") { cout << "Null" << endl; }
-        else if (CurrentOption == "Pillbox") { cout << "Pillbox" << endl; }*/
-        //window.clear();
-        cout << time << endl;
-        Rhino.SetTime(time);
-        Rhino.Move();
+
+        rhino.SetTime(time);
+        rhino.Move();
         window.draw(BarSprite);
-        window.draw(Rhino.GetSprite());
+        window.draw(rhino.GetSprite());
         window.display();
     }
 

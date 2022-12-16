@@ -3,12 +3,11 @@
 #include <iostream>
 using namespace sf;
 
-class Enemy
+class Rhino
 {
 public:
-	void MoveTo(int x, int y); //перемещение в указанную точку
-	void Move();
-	void Death(); //вызывается при убийтве игрока
+	void Move(); //перемещает спрайт
+	void Death(); //вызывается при убийтве спрайта
 	int GetX(); //геттер для x
 	int GetY(); //геттер для y
 	int GetHP(); //геттер для HP
@@ -17,7 +16,7 @@ public:
 	void SetHP(int HP); //сеттер для HP
 	void SetTime(float time); //сеттер для времени
 	Sprite GetSprite(); //геттер для спрайта
-	Enemy(String File, int x, int y); //конструктор класса
+	Rhino(String File, int x, int y); //конструктор класса
 
 private:
 	int x; //x координата спрайта
