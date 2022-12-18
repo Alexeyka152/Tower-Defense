@@ -22,6 +22,8 @@ float Distance(float x, float y, Sprite C)
 
 int main()
 {
+    srand(time(NULL));
+    int RhinoCounter = 0, ConscriptCounter = 0;
     int DefenseMap[30][21] = { 0 }; //0 - ничего нет, 1 - Pillbox, 2 - PrismTower
     int DeathCounter = 0;
     bool NewWave = true; //индикатор начала новой волны
@@ -30,7 +32,6 @@ int main()
     vector<Rhino> RhinoWave; //вектор Rhino в волне
     vector<Conscript> ConscriptWave; //вектор Conscript в волне
     vector<Tower> Towers;
-    srand(time(NULL));
     /*Rhino rhino("Rhino", -50, 50);
     Conscript conscript("Conscript", -50, 50);*/
 
@@ -63,23 +64,30 @@ int main()
 
         if (NewWave == true) //генерация новой волны
         {
-            //WaveSquad.push_back(rand() % 2 + 1);
-            WaveSquad.push_back(2);
-            WaveSquad.push_back(2);
-
-            for (int i = 0; i < WaveSquad.size(); i++)
+            for (int i = 0; i < RhinoWave.size(); i++)
             {
-                if (WaveSquad[i] == 1)
-                {
-                    Rhino rhino("Rhino", -50 * i, 50);
-                    RhinoWave.push_back(rhino);
-                }
-                else if (WaveSquad[i] == 2)
-                {
-                    Conscript conscript("Conscript", -50 * i, 50);
-                    ConscriptWave.push_back(conscript);
-                }
+                Rhino rhino("Rhino", -50 * i, 50);
+                RhinoWave[i] = rhino;
             }
+            for (int i = 0; i < ConscriptWave.size(); i++)
+            {
+                Conscript conscript("Conscript", -50 * (i + RhinoWave.size()), 50);
+                ConscriptWave[i] = conscript;
+            }
+
+            WaveSquad.push_back(rand() % 2 + 1);
+
+            if (WaveSquad[WaveSquad.size() - 1] == 1)
+            {
+                Rhino rhino("Rhino", -50 * WaveSquad.size(), 50);
+                RhinoWave.push_back(rhino);
+            }
+            else if (WaveSquad[WaveSquad.size() - 1] == 2)
+            {
+                Conscript conscript("Conscript", -50 * WaveSquad.size(), 50);
+                ConscriptWave.push_back(conscript);
+            }
+            RhinoCounter = 0; ConscriptCounter = 0;
             NewWave = false;
         }
 
@@ -119,7 +127,7 @@ int main()
                 else { CurrentOption = "Null"; }
             }
         }
-
+        
         for (int i = 0; i < RhinoWave.size(); i++) //отрисовка и передвижение Rhino
         {
             RhinoWave[i].SetTime(time);
@@ -136,6 +144,7 @@ int main()
 
         for (int i = 0; i < Towers.size(); i++) //отрисовка и атака защитных сооружений
         {
+            Towers[i].AddCoolDown(CD);
 
             if (Towers[i].GetFile() == "Pillbox")
             {
@@ -144,12 +153,20 @@ int main()
 
                 if (Towers[i].GetCoolDown() >= 1)
                 {
+                    Towers[i].AddCoolDown(-1 * Towers[i].GetCoolDown());
+
                     for (int j = 0; j < ConscriptWave.size(); j++) //атака Conscript
                     {
-                        cout << j << endl;
-                        if (Distance(50 * Towers[i].GetX(), 50 * Towers[i].GetY(), ConscriptWave[j].GetSprite()) <= 500)
+                        if (Distance(50 * Towers[i].GetX(), 50 * Towers[i].GetY(), ConscriptWave[j].GetSprite()) <= 200)
                         {
-                            ConscriptWave[j].SetHP(ConscriptWave[j].GetHP() - 10);
+                            ConscriptWave[j].SetHP(ConscriptWave[j].GetHP() - 25);
+                            if (ConscriptWave[j].GetHP() <= 0)
+                            {
+                                DeathCounter++;
+                                ConscriptWave[j].SetHP(100);
+                                ConscriptWave[j].SetX(3000);
+                                ConscriptWave[j].SetY(3000);
+                            }
                             AntiSecondAttack = true;
                             break;
                         }
@@ -162,6 +179,13 @@ int main()
                             if (Distance(50 * Towers[i].GetX(), 50 * Towers[i].GetY(), RhinoWave[j].GetSprite()) <= 200)
                             {
                                 RhinoWave[j].SetHP(RhinoWave[j].GetHP() - 10);
+                                if (RhinoWave[j].GetHP() <= 0)
+                                {
+                                    DeathCounter++;
+                                    RhinoWave[j].SetHP(100);
+                                    RhinoWave[j].SetX(3000);
+                                    RhinoWave[j].SetY(3000);
+                                }
                                 break;
                             }
                         }
@@ -171,36 +195,56 @@ int main()
                 AntiSecondAttack = false;
             }
             
-            else if (Towers[i].GetFile() == "PrismTower" && Towers[i].GetCoolDown() >= 1)
+            else if (Towers[i].GetFile() == "PrismTower1")
             {
-                for (int j = 0; j < RhinoWave.size(); j++) //атака Rhino
-                {
-                    if (Distance(50 * Towers[i].GetX(), 50 * Towers[i].GetY(), RhinoWave[j].GetSprite()) <= 500)
-                    {
-                        RhinoWave[j].SetHP(RhinoWave[j].GetHP() - 10);
-                        AntiSecondAttack = true;
-                        break;
-                    }
-                }
+                Tower PrismTower("PrismTower1", 50 * Towers[i].GetX(), 50 * Towers[i].GetY());
+                window.draw(PrismTower.GetSprite());
 
-                if (!AntiSecondAttack)
+                if (Towers[i].GetCoolDown() >= 1.5)
                 {
-                    for (int j = 0; j < ConscriptWave.size(); j++) //атака Conscript
+                    Towers[i].AddCoolDown(-1 * Towers[i].GetCoolDown());
+
+                    for (int j = 0; j < RhinoWave.size(); j++) //атака Rhino
                     {
-                        if (Distance(50 * Towers[i].GetX(), 50 * Towers[i].GetY(), ConscriptWave[j].GetSprite()) <= 200)
+                        if (Distance(50 * Towers[i].GetX(), 50 * Towers[i].GetY(), RhinoWave[j].GetSprite()) <= 200)
                         {
-                            ConscriptWave[j].SetHP(ConscriptWave[j].GetHP() - 10);                            
+                            RhinoWave[j].SetHP(RhinoWave[j].GetHP() - 40);
+                            if (RhinoWave[j].GetHP() <= 0)
+                            {
+                                DeathCounter++;
+                                RhinoWave[j].SetHP(100);
+                                RhinoWave[j].SetX(3000);
+                                RhinoWave[j].SetY(3000);
+                            }
+                            AntiSecondAttack = true;
                             break;
                         }
                     }
-                }
 
+                    if (!AntiSecondAttack)
+                    {
+                        for (int j = 0; j < ConscriptWave.size(); j++) //атака Conscript
+                        {
+                            if (Distance(50 * Towers[i].GetX(), 50 * Towers[i].GetY(), ConscriptWave[j].GetSprite()) <= 200)
+                            {
+                                ConscriptWave[j].SetHP(ConscriptWave[j].GetHP() - 25);
+                                if (ConscriptWave[j].GetHP() <= 0)
+                                {
+                                    DeathCounter++;
+                                    ConscriptWave[j].SetHP(100);
+                                    ConscriptWave[j].SetX(3000);
+                                    ConscriptWave[j].SetY(3000);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
                 AntiSecondAttack = false;
             }
         }
-        window.display();
-
         if (DeathCounter == WaveSquad.size()) { NewWave = true; DeathCounter = 0; }
+        window.display();
     }
 
     return 0;

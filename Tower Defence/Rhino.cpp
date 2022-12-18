@@ -2,6 +2,8 @@
 
 void Rhino::Move()
 {
+	velocity = 0.05 + 0.05 * hp / 100;
+
 	if (sprite.getPosition().x >= 749 && sprite.getPosition().x <= 751 && sprite.getPosition().y == 50)
 	{
 		sprite.setPosition(750, 51);
