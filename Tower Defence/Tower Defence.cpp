@@ -32,6 +32,13 @@ int main()
     vector<Rhino> RhinoWave; //вектор Rhino в волне
     vector<Conscript> ConscriptWave; //вектор Conscript в волне
     vector<Tower> Towers;
+    Font font;
+    font.loadFromFile("CyrilicOld.TTF");
+    Text MoneyText("", font, 30);
+    //MoneyText.setColor(Color::Red);
+    MoneyText.setStyle(Text::Bold); 
+    int Money = 75;
+    float MoneyTime = 0;
     /*Rhino rhino("Rhino", -50, 50);
     Conscript conscript("Conscript", -50, 50);*/
 
@@ -59,8 +66,14 @@ int main()
 
         float time = clock.getElapsedTime().asMicroseconds(); //время, что бы не было тормоза при большом количестве спрайтов
         float CD = clock.getElapsedTime().asSeconds();
+        MoneyTime+= clock.getElapsedTime().asSeconds();
+        if (MoneyTime >= 2) { MoneyTime = 0; Money += 5; }
         clock.restart();
         time = time / 800;
+
+        MoneyText.setString(to_string(Money) + " $");
+        MoneyText.setPosition(1720, 5);
+        window.draw(MoneyText);
 
         if (NewWave == true) //генерация новой волны
         {
@@ -110,17 +123,19 @@ int main()
                     }
                     else if (MousePosition.x < 1500)
                     {
-                        if (CurrentOption == "Pillbox")
+                        if (CurrentOption == "Pillbox" && Money >= 50)
                         {
                             DefenseMap[MousePosition.x / 50][MousePosition.y / 50] = 1;
                             Tower Pillbox("Pillbox", MousePosition.x / 50, MousePosition.y / 50);
                             Towers.push_back(Pillbox);
+                            Money -= 50;
                         }
-                        else if (CurrentOption == "PrismTower")
+                        else if (CurrentOption == "PrismTower" && Money >= 100)
                         {
                             DefenseMap[MousePosition.x / 50][MousePosition.y / 50] = 2;
                             Tower PrismTower("PrismTower1", MousePosition.x / 50, MousePosition.y / 50);
                             Towers.push_back(PrismTower);
+                            Money -= 100;
                         }
                     }
                 }
